@@ -1,2 +1,2 @@
-# IzmirGuessr
+# IzmirGuessr v1
 IzmirGuessr
