@@ -1,4 +1,3 @@
-// script.js
 let guessedLocationMarker;
 let randomLocation;
 let minimap;
@@ -15,7 +14,7 @@ let totalPoints = 0;
 const initialLat = 38.609979;
 const initialLon = 27.398601;
 const initialZoom = 9;
-const greenDistricts = []; // Reset greenDistricts array
+const greenDistricts = []; 
 
 let startPage = document.getElementById('startpage');
 let gamemap = document.getElementById('gamemap');
@@ -293,7 +292,7 @@ const map2 = L.map('map2', {
     minZoom: 9,
 }).setView([initialLat, initialLon], initialZoom);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Â© OpenStreetMap contributors' }).addTo(map2);
 
 function isPointInPolygon(point, polygon) {
     const latLngs = polygon.getLatLngs()[0];
@@ -316,18 +315,12 @@ function isPointInPolygon(point, polygon) {
     return inside;
 }
 
-
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
-
-
-
-
-
 
 const initiallyGreenDistricts = [];
 const districtLayers = [];
@@ -337,37 +330,28 @@ districtsData.forEach(district => {
     const polygon = L.polygon(district.coordinates, { fill: true, color: 'green' }).addTo(map2);
     districtLayers.push({ name: district.name, layer: polygon, state: 1, bounds: district.bounds });
 
-    // Store initially green districts in the array
     if (district.state === 1) {
         initiallyGreenDistricts.push({ bounds: district.bounds });
     }
 });
 
-
 map2.on('mousedown', function (event) {
     districtLayers.forEach(district => {
         if (isPointInPolygon(event.latlng, district.layer)) {
             if (district.layer.options.fill) {
-                // Turn red
                 district.layer.setStyle({ fill: false, color: 'red' });
                 district.state = 0;
-
-                // Remove from initiallyGreenDistricts
                 const index = initiallyGreenDistricts.findIndex(greenDistrict => greenDistrict.bounds === district.bounds);
                 if (index !== -1) {
                     initiallyGreenDistricts.splice(index, 1);
                 }
             } else {
-                // Turn green
                 district.layer.setStyle({ fill: true, color: 'green' });
                 district.state = 1;
-
-                // Add to initiallyGreenDistricts if not already present
                 if (!initiallyGreenDistricts.some(greenDistrict => greenDistrict.bounds === district.bounds)) {
                     initiallyGreenDistricts.push({ name: district.name, bounds: district.bounds });
                 }
             }
-
             console.log(`${district.name}: ${district.state}`);
             console.log("Initially Green Districts:", initiallyGreenDistricts);
             formatlama();
@@ -382,8 +366,6 @@ function formatlama() {
     return formattedBounds[0];
 }
 
-
-
 function getRandomLocation() {
     selectedDistrictBounds = formatlama();
     const lat = Math.random() * (selectedDistrictBounds.north - selectedDistrictBounds.south) + selectedDistrictBounds.south;
@@ -396,19 +378,16 @@ function loadGoogleMapsAPI(callback) {
     script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB-sQNlbheRpjMPOIKKUB3xg02E4Y3ZJ0Y&libraries=places&v=weekly&callback=${callback}`;
     document.body.appendChild(script);
 }
-function initMap() {
-    function initializeMapWithRandomLocation() {
-       
-       randomLocation = getRandomLocation();
 
+function initMap() {
+    function initializeMapWithRandomLocation() {       
+       randomLocation = getRandomLocation();
         gamemap = new google.maps.Map(document.getElementById('gamemap'), {
             center: randomLocation,
             zoom: 14,
-            streetViewControl: false,
-        });
+            streetViewControl: false,        });
 
         const streetViewService = new google.maps.StreetViewService();
-
         streetViewService.getPanorama({ location: randomLocation, radius: 50 }, function (data, status) {
             if (status === 'OK') {
                 const panorama = new google.maps.StreetViewPanorama(document.getElementById('gamemap'), {
@@ -511,7 +490,7 @@ function returnToStart() {
             gamemap.setStreetView(panorama);
         } else {
             console.warn('Street View data not found for the selected location. Retrying...');
-            returnToStart(); // Retry if Street View data is not found
+            returnToStart();
         }
     });
 }
@@ -652,16 +631,11 @@ function startNextGame() {
     }
 }
 
-// script.js
-
-// ... (existing code)
-
 function addAllDistricts() {
     districtLayers.forEach(district => {
         district.layer.setStyle({ fill: true, color: 'green' });
         district.state = 1;
 
-        // Add to initiallyGreenDistricts if not already present
         if (!initiallyGreenDistricts.some(greenDistrict => greenDistrict.bounds === district.bounds)) {
             initiallyGreenDistricts.push({ name: district.name, bounds: district.bounds });
         }
@@ -676,7 +650,6 @@ function removeAllDistricts() {
         district.layer.setStyle({ fill: false, color: 'red' });
         district.state = 0;
 
-        // Remove from initiallyGreenDistricts
         const index = initiallyGreenDistricts.findIndex(greenDistrict => greenDistrict.bounds === district.bounds);
         if (index !== -1) {
             initiallyGreenDistricts.splice(index, 1);
@@ -691,21 +664,17 @@ function toggleDistrict(districtName) {
     const district = districtLayers.find(district => district.name === districtName);
     if (district) {
         if (district.layer.options.fill) {
-            // Turn red
             district.layer.setStyle({ fill: false, color: 'red' });
             district.state = 0;
 
-            // Remove from initiallyGreenDistricts
             const index = initiallyGreenDistricts.findIndex(greenDistrict => greenDistrict.bounds === district.bounds);
             if (index !== -1) {
                 initiallyGreenDistricts.splice(index, 1);
             }
         } else {
-            // Turn green
             district.layer.setStyle({ fill: true, color: 'green' });
             district.state = 1;
 
-            // Add to initiallyGreenDistricts if not already present
             if (!initiallyGreenDistricts.some(greenDistrict => greenDistrict.bounds === district.bounds)) {
                 initiallyGreenDistricts.push({ name: district.name, bounds: district.bounds });
             }
@@ -715,9 +684,6 @@ function toggleDistrict(districtName) {
         console.log("Initially Green Districts:", initiallyGreenDistricts);
     }
 }
-
-// ... (existing code)
-
 
 buttonrow.style.display = 'none'
 gamemap.style.display = 'none'
