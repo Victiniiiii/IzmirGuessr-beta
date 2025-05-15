@@ -375,7 +375,7 @@ function getRandomLocation() {
 
 function loadGoogleMapsAPI(callback) {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB-sQNlbheRpjMPOIKKUB3xg02E4Y3ZJ0Y&libraries=places&v=weekly&callback=${callback}`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB-sQNlbheRpjMPOIKKUB3xg02E4Y3ZJ0Y&libraries=places&v=weekly&callback=${callback}`; // Been years since this key expired don't even try
     document.body.appendChild(script);
 }
 
